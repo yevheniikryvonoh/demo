@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Blockly Example</title>
+    <!-- Load Blockly from CDN -->
+    <script src="https://unpkg.com/blockly/blockly.min.js"></script>
+    <style>
+      /* Basic styling for the Blockly workspace */
+      #blocklyDiv {
+        width: calc(100vw - 220px);
+        height: calc(100vh - 220px);
+        border: 1px solid #ccc;
+        margin-top: 20px;
+        background-color: #f9f9f9;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background-color: #f0f0f0;
+      }
+      h1 {
+        margin-top: 20px;
+        color: #333;
+      }
+      .button-container {
+        margin-top: 20px;
+      }
+      button {
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        cursor: pointer;
+        border-radius: 4px;
+        transition: background-color 0.3s;
+      }
+      button:hover {
+        background-color: #45a049;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Blockly Example</h1>
+    <!-- Container for Blockly workspace -->
+    <div id="blocklyDiv"></div>
+
+    <!-- Toolbox definition with some example blocks -->
+    <xml id="toolbox" style="display: none">
+      <category name="Logic" colour="#5C81A6">
+        <block type="controls_if"></block>
+        <block type="logic_compare"></block>
+        <block type="logic_operation"></block>
+        <block type="logic_boolean"></block>
+      </category>
+      <category name="Loops" colour="#5CA65C">
+        <block type="controls_repeat_ext"></block>
+        <block type="controls_whileUntil"></block>
+      </category>
+      <category name="Math" colour="#5C68A6">
+        <block type="math_number"></block>
+        <block type="math_arithmetic"></block>
+      </category>
+      <category name="Text" colour="#A65C5C">
+        <block type="text"></block>
+        <block type="text_print"></block>
+      </category>
+    </xml>
+
+    <script>
+      // Initialize Blockly workspace
+      var workspace = Blockly.inject("blocklyDiv", {
+        toolbox: document.getElementById("toolbox"),
+        scrollbars: true,
+        trashcan: true,
+        sounds: true,
+        media: "https://unpkg.com/blockly/media/",
+      });
+
+      // Optional: Add a function to show generated code
+      function showCode() {
+        var code = Blockly.JavaScript.workspaceToCode(workspace);
+        alert(code);
+      }
+
+      // Optional: Save workspace
+      function saveWorkspace() {
+        var xml = Blockly.Xml.workspaceToDom(workspace);
+        var xml_text = Blockly.Xml.domToText(xml);
+        localStorage.setItem("blocklyWorkspace", xml_text);
+      }
+
+      // Optional: Load workspace
+      function loadWorkspace() {
+        var xml_text = localStorage.getItem("blocklyWorkspace");
+        if (xml_text) {
+          var xml = Blockly.Xml.textToDom(xml_text);
+          Blockly.Xml.domToWorkspace(xml, workspace);
+        }
+      }
+
+      // Load any saved workspace when page loads
+      window.onload = loadWorkspace;
+    </script>
+
+    <!-- Optional buttons to interact with the workspace -->
+    <div class="button-container">
+      <button onclick="showCode()">Show JavaScript Code</button>
+      <button onclick="saveWorkspace()">Save Workspace</button>
+    </div>
+  </body>
+</html>

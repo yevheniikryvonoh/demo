@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css"
+      rel="stylesheet"
+    />
+    <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
+    <title>MediaPipe Demos</title>
+    <style>
+      .highlighter {
+        position: absolute;
+        border: 2px solid red;
+        pointer-events: none;
+      }
+      .info {
+        position: absolute;
+        text-shadow: 1px 1px 2px black;
+        background: rgba(255, 255, 255, 0.8);
+        font-weight: bold;
+        margin: 0;
+        padding: 2px;
+        pointer-events: none;
+      }
+      .key-point {
+        position: absolute;
+        background: blue;
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        pointer-events: none;
+      }
+      #uploadedImage,
+      #poseImage {
+        width: 500px;
+        height: 500px;
+      }
+      .tab-content {
+        display: none;
+      }
+      .tab-content.active {
+        display: block;
+      }
+      .mdc-tab-bar {
+        margin: 20px 0;
+      }
+      canvas {
+        position: absolute;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>MediaPipe Demos</h1>
+
+    <!-- Tab Navigation -->
+    <div class="mdc-tab-bar" role="tablist">
+      <div class="mdc-tab-scroller">
+        <div class="mdc-tab-scroller__scroll-content">
+          <!-- <button
+            class="mdc-tab mdc-tab--active"
+            role="tab"
+            onclick="switchTab('face')"
+          >
+            <span class="mdc-tab__content">
+              <span class="mdc-tab__text-label">Face Detector</span>
+            </span>
+          </button> -->
+          <button class="mdc-tab" role="tab" onclick="switchTab('pose')">
+            <span class="mdc-tab__content">
+              <span class="mdc-tab__text-label">Pose Detector</span>
+            </span>
+          </button>
+          <!-- <button class="mdc-tab" role="tab" onclick="switchTab('audio')">
+            <span class="mdc-tab__content">
+              <span class="mdc-tab__text-label">Audio Classifier</span>
+            </span>
+          </button> -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Face Detector Tab -->
+    <section id="face-tab" class="tab-content active">
+      <h2>Demo: Image POSE Detection</h2>
+      <div class="face detectOnClick" style="position: relative">
+        <img
+          id="uploadedImage"
+          src=""
+          style="display: none"
+          crossorigin="anonymous"
+        />
+      </div>
+      <div class="controls">
+        <input
+          type="file"
+          id="imageUpload"
+          accept="image/*"
+          style="display: none"
+        />
+        <button
+          class="mdc-button mdc-button--raised"
+          onclick="document.getElementById('imageUpload').click()"
+        >
+          Upload Image
+        </button>
+      </div>
+    </section>
+
+    <!-- Pose Detector Tab -->
+    <section id="pose-tab" class="tab-content">
+      <h2>Demo: Pose Detection</h2>
+      <div class="detectOnClick" style="position: relative">
+        <img
+          id="poseImage"
+          src=""
+          style="display: none"
+          crossorigin="anonymous"
+        />
+      </div>
+      <div class="controls">
+        <input
+          type="file"
+          id="poseImageUpload"
+          accept="image/*"
+          style="display: none"
+        />
+        <button
+          class="mdc-button mdc-button--raised"
+          onclick="document.getElementById('poseImageUpload').click()"
+        >
+          Upload Image
+        </button>
+      </div>
+    </section>
+
+    <!-- Audio Classifier Tab -->
+    <section id="audio-tab" class="tab-content">
+      <h2>Demo: Audio Classification</h2>
+      <div id="audioResult"></div>
+      <div class="controls">
+        <input
+          type="file"
+          id="audioUpload"
+          accept="audio/*"
+          style="display: none"
+        />
+        <button
+          class="mdc-button mdc-button--raised"
+          onclick="document.getElementById('audioUpload').click()"
+        >
+          Upload Audio
+        </button>
+      </div>
+    </section>
+
+    <!-- <script type="module" src="mediapipe.js"></script> -->
+    <script type="module" src="pose_detector.js"></script>
+    <!-- <script type="module" src="audio_classifier.js"></script> -->
+
+    <script>
+      // Face Detector Image Upload
+      const imageUpload = document.getElementById("imageUpload");
+      const uploadedImage = document.getElementById("uploadedImage");
+      imageUpload.addEventListener("change", function (event) {
+        const file = event.target.files[0];
+        if (file) {
+          uploadedImage.src = URL.createObjectURL(file);
+          uploadedImage.style.display = "block";
+        }
+      });
+      uploadedImage.addEventListener("load", function () {
+        uploadedImage.click();
+      });
+
+      // Pose Detector Image Upload
+      const poseImageUpload = document.getElementById("poseImageUpload");
+      const poseImage = document.getElementById("poseImage");
+      poseImageUpload.addEventListener("change", function (event) {
+        const file = event.target.files[0];
+        if (file) {
+          poseImage.src = URL.createObjectURL(file);
+          poseImage.style.display = "block";
+        }
+      });
+      poseImage.addEventListener("load", function () {
+        poseImage.click();
+      });
+
+      // Tab Switching Function
+      function switchTab(tabName) {
+        const tabs = document.querySelectorAll(".mdc-tab");
+        const contents = document.querySelectorAll(".tab-content");
+
+        tabs.forEach((tab) => tab.classList.remove("mdc-tab--active"));
+        contents.forEach((content) => content.classList.remove("active"));
+
+        document
+          .querySelector(`button[onclick="switchTab('${tabName}')"]`)
+          .classList.add("mdc-tab--active");
+        document.getElementById(`${tabName}-tab`).classList.add("active");
+      }
+    </script>
+  </body>
+</html>
